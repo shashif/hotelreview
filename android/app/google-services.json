@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "729109870985",
+    "project_id": "hotelreview-81f23",
+    "storage_bucket": "hotelreview-81f23.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:729109870985:android:1f9a140513b978bdf24958",
+        "android_client_info": {
+          "package_name": "hotelreview.coxbazar.hotel_review"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "729109870985-hj96ej7uh3bgrnt33a920efpi6rnegpb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "hotelreview.coxbazar.hotel_review",
+            "certificate_hash": "90458f2158d9b26e402934d44cf2dc1c14c69ed3"
+          }
+        },
+        {
+          "client_id": "729109870985-18b1lj6ifgo0pojgrb4cnv67obp4pb8q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA90amaoLg8GRIy8gpsiCkIdd9f2rMZh3w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "729109870985-18b1lj6ifgo0pojgrb4cnv67obp4pb8q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
