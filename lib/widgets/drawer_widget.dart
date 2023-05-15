@@ -63,7 +63,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 }),
             listTile(
                 iconData: Icons.shop_outlined,
-                title: "Ads Screen",
+                title: "Premium Ads Post",
                 onTap: () {
                   Navigator.of(context).push(
                       MaterialPageRoute(builder: (context) => AdsScreen()));
