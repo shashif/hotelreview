@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hotel_review/screens/ads_screen/ads_screen.dart';
 
 import '../providers/user_provider.dart';
 import '../screens/home_screen/home_screen.dart';
+import '../screens/splash_screen/splash_screen.dart';
 import 'drawer_list_tile_widget.dart';
 
 
@@ -98,6 +100,15 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 iconData: Icons.format_quote_outlined,
                 title: "FAQs",
                 onTap: () {}),
+
+            listTile(
+                iconData: Icons.login_outlined,
+                title: "Logout",
+                onTap: () {
+                  FirebaseAuth.instance.signOut();
+                  Navigator.pushReplacement(context,
+                                MaterialPageRoute(builder: (context) => SplashScreen()));
+                }),
             Container(
               height: 350,
               padding: const EdgeInsets.symmetric(horizontal: 20),
