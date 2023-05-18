@@ -37,11 +37,12 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.black),
         backgroundColor: primaryColor,
-        title: const Text(
+        title:  const Text(
           'Home',
           style: TextStyle(
             color: Colors.black,
             fontSize: 17,
+            fontFamily:'Lobster',
           ),
         ),
         actions: [],
