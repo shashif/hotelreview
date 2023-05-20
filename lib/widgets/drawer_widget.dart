@@ -4,6 +4,7 @@ import 'package:hotel_review/screens/ads_screen/ads_screen.dart';
 
 import '../providers/user_provider.dart';
 import '../screens/home_screen/home_screen.dart';
+import '../screens/profile_screen/profile_screen.dart';
 import '../screens/splash_screen/splash_screen.dart';
 import 'drawer_list_tile_widget.dart';
 
@@ -74,8 +75,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 iconData: Icons.person_outlined,
                 title: "My Profile",
                 onTap: () {
-                  // Navigator.of(context).push(MaterialPageRoute(
-                  //     builder: (context) =>  MyProfile(userData:userData)));
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>  ProfileScreen(userData:userData)));
                 }),
             listTile(
                 iconData: Icons.notifications_outlined,

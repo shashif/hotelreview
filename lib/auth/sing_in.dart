@@ -6,6 +6,7 @@ import 'package:flutter_signin_button/button_view.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/BasicInfoProvider.dart';
 import '../providers/user_provider.dart';
 import '../screens/home_screen/home_screen.dart';
 
@@ -39,13 +40,11 @@ class _SingInState extends State<SingIn> {
 
       // print("signed in " + user.displayName);
       userProvider.addUserData(
-          currentUser:user! ,
-          userEmail:user.email! ,
-          userImage: user.photoURL!,
-          userName:user.displayName!,
+        currentUser: user!,
+        userEmail: user.email!,
+        userImage: user.photoURL!,
+        userName: user.displayName!,
       );
-
-
 
       return user;
     } catch (e) {}
@@ -53,7 +52,14 @@ class _SingInState extends State<SingIn> {
 
   @override
   Widget build(BuildContext context) {
-    userProvider=Provider.of<UserProvider>(context);
+    userProvider = Provider.of<UserProvider>(context);
+
+    BasicInfoProvider basicInfoProvider = Provider.of(context);
+    basicInfoProvider.readBasicAppInfo();
+
+    String appsTitle = basicInfoProvider.basicInfoDataList.isNotEmpty
+        ? basicInfoProvider.basicInfoDataList[0].appsTitle
+        : '';
     return Scaffold(
       body: Container(
         height: double.infinity,
@@ -75,28 +81,33 @@ class _SingInState extends State<SingIn> {
                 children: [
                   Text('Sign in to continue'),
                   Text(
-                    'Hotel Review',
-                    style:
-                        TextStyle(fontSize: 50, color: Colors.white, shadows: [
-                      BoxShadow(
-                        blurRadius: 5,
-                        offset: Offset(3, 3),
-                        color: Colors.green.shade900,
-                      ),
-                    ]),
+                    appsTitle,
+                    textAlign: TextAlign.justify,
+                    style: TextStyle(
+                        fontSize: 30,
+                        color: Colors.white,
+                        fontFamily: 'Verela',
+                        shadows: [
+                          BoxShadow(
+                            blurRadius: 5,
+                            offset: Offset(3, 3),
+                            color: Colors.green.shade900,
+                          ),
+                        ]),
                   ),
                   // with custom text
                   Column(
                     children: [
-
                       SignInButton(
                         Buttons.Google,
                         text: "Sign in with Google",
                         onPressed: () {
-                          _googleSignUp().then((value) => Navigator.of(context)
-                              .pushReplacement(MaterialPageRoute(
-                                  builder: (context) => HomeScreen()
-                          ),),);
+                          _googleSignUp().then(
+                            (value) => Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                  builder: (context) => HomeScreen()),
+                            ),
+                          );
                         },
                       ),
                     ],
