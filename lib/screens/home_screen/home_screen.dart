@@ -10,10 +10,11 @@ import '../../providers/BasicInfoProvider.dart';
 import '../../providers/user_provider.dart';
 import '../../widgets/drawer_widget.dart';
 import '../../widgets/homepage_premimum_ads.dart';
+import '../free_post_screen/free_post_screen.dart';
 import '../profile_screen/profile_screen.dart';
 import '../search_product/search_product.dart';
 import '../splash_screen/splash_screen.dart';
-import '../upload_add_screen/upload_add_screen.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -84,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: primaryColor,
         onPressed: (){
           Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => UploadAddScreen(userData:userData)));
+              MaterialPageRoute(builder: (context) => FreePostScreen(userData:userData)));
         },
 
       ),

@@ -1,44 +1,51 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hotel_review/screens/dialogbox/loading_dialog.dart';
+import 'package:hotel_review/screens/home_screen/home_screen.dart';
 import 'package:hotel_review/widgets/global_var.dart';
 import 'package:path/path.dart' as Path;
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../models/user_model.dart';
 import '../../providers/user_provider.dart';
 import '../../widgets/color_widget.dart';
 import '../../widgets/drawer_widget.dart';
 
-class UploadAddScreen extends StatefulWidget {
+class FreePostScreen extends StatefulWidget {
   UserModel userData;
 
-  UploadAddScreen({required this.userData});
+  FreePostScreen({required this.userData});
 
   @override
-  State<UploadAddScreen> createState() => _UploadAddScreenState();
+  State<FreePostScreen> createState() => _FreePostScreenState();
 }
 
-class _UploadAddScreenState extends State<UploadAddScreen> {
+class _FreePostScreenState extends State<FreePostScreen> {
+  String postID = Uuid().v4();
   bool next = false;
   bool uploading = false;
   final List<File> _imagePath = [];
 
+  //String uniqueFileName = DateTime.now().millisecondsSinceEpoch.toString();
   List<String> imageUrlList = [];
 
   // widget.userData.userName
   String name = '';
   String emailID = '';
   double val = 0;
-  CollectionReference? imgRef;
 
   String itemPrice = '';
-  String itemModel = '';
-  String itemColor = '';
+  String itemTitle = '';
+  String phoneNumber = '';
   String itemDescription = '';
+  String address = '';
+  bool isAdminApprove = false;
 
   chooseImage() async {
     XFile? pickedFile =
@@ -48,16 +55,22 @@ class _UploadAddScreenState extends State<UploadAddScreen> {
     });
   }
 
-  Future upload() async {
+  Future uploadFile() async {
     int i = 1;
     for (var img in _imagePath) {
       setState(() {
         val = i / _imagePath.length;
       });
 
+      String uniqueFileName = DateTime.now().millisecondsSinceEpoch.toString();
+      String fileExtension = Path.extension(img.path);
+      String fileName =
+          '${Path.basenameWithoutExtension(img.path)}$uniqueFileName$fileExtension';
+
       var ref = FirebaseStorage.instance
           .ref()
-          .child('freePostImage/${Path.basename(img.path)}');
+          // .child('freePostImage/${Path.basename(img.path)}');
+          .child('FreePostImage/$fileName');
       await ref.putFile(img).whenComplete(() async {
         await ref.getDownloadURL().then((value) {
           imageUrlList.add(value);
@@ -87,20 +100,13 @@ class _UploadAddScreenState extends State<UploadAddScreen> {
   }
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    //getNameOFUser();
-    imgRef = FirebaseFirestore.instance.collection('imageUrls');
-  }
-
-  @override
   Widget build(BuildContext context) {
     UserProvider userProvider = Provider.of(context);
     userProvider.getUserData();
     var userData = userProvider.currentUserData;
     name = widget.userData.userName;
     emailID = widget.userData.userEmail;
+    userImageURl = widget.userData.userImage;
     return Scaffold(
       backgroundColor: scaffoldBackgroundColor,
       appBar: AppBar(
@@ -119,15 +125,15 @@ class _UploadAddScreenState extends State<UploadAddScreen> {
               ? Container()
               : ElevatedButton(
                   onPressed: () {
-                    if ( _imagePath.length >0) {
+                    if (_imagePath.length > 0) {
                       setState(() {
                         uploading = true;
                         next = true;
                       });
-                    }
-                    else{
-                      Fluttertoast.showToast(msg: 'Please Select minimum 1 picture',
-                      gravity: ToastGravity.CENTER);
+                    } else {
+                      Fluttertoast.showToast(
+                          msg: 'Please Select minimum 1 picture',
+                          gravity: ToastGravity.CENTER);
                     }
                   },
                   child: Text(
@@ -160,9 +166,9 @@ class _UploadAddScreenState extends State<UploadAddScreen> {
                       height: 5,
                     ),
                     TextField(
-                      decoration: InputDecoration(hintText: 'Enter Name'),
+                      decoration: InputDecoration(hintText: 'Enter Title'),
                       onChanged: (value) {
-                        itemModel = value;
+                        itemTitle = value;
                       },
                     ),
                     SizedBox(
@@ -178,10 +184,106 @@ class _UploadAddScreenState extends State<UploadAddScreen> {
                       height: 5,
                     ),
                     TextField(
-                      decoration: InputDecoration(hintText: 'Color'),
+                      decoration: InputDecoration(hintText: 'Phone Number'),
                       onChanged: (value) {
-                        itemColor = value;
+                        phoneNumber = value;
                       },
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    TextField(
+                      decoration: InputDecoration(hintText: 'Address'),
+                      onChanged: (value) {
+                        address = value;
+                      },
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    // InkWell(
+                    //   onTap: () {
+                    //     Navigator.of(context).push(
+                    //       MaterialPageRoute(
+                    //         builder: (context) => CostomGoogleMap(),
+                    //       ),
+                    //     );
+                    //   },
+                    //   child: Container(
+                    //     height: 47,
+                    //     width: double.infinity,
+                    //     child: Column(
+                    //       mainAxisAlignment: MainAxisAlignment.center,
+                    //       crossAxisAlignment: CrossAxisAlignment.start,
+                    //       children: [
+                    //         checkoutProvider.setLoaction == null
+                    //             ? Text("Set Loaction")
+                    //             : Text("Done!"),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.5,
+                      child: ElevatedButton(
+                        style: ButtonStyle(),
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return LoadingAlertDialog(
+                                    message: 'Uploading.....');
+                              });
+
+                          uploadFile().whenComplete(() {
+                            FirebaseFirestore.instance
+
+                                //working stat
+                                // .collection('FreePost')
+                                // .doc(postID)
+                                //working end
+
+                                .collection('FreePost')
+                                .doc(FirebaseAuth.instance.currentUser?.uid)
+                                .collection('YourPost')
+                                .doc(postID)
+                                .set({
+                              'id': FirebaseAuth.instance.currentUser?.uid,
+                              'userName': name,
+                              'itemTitle': itemTitle,
+                              'postID': postID,
+                              'itemDescription': itemDescription,
+                              'phoneNumber': phoneNumber,
+                              'isAdminApprove': isAdminApprove,
+                              'timestamp': DateTime.now(),
+                              'userImageURl': userImageURl,
+                              'imageUrl1': imageUrlList[0].toString(),
+                              'imageUrl2': imageUrlList[1].toString(),
+                              'imageUrl3': imageUrlList[2].toString(),
+                              'imageUrl4': imageUrlList[3].toString(),
+                              'imageUrl5': imageUrlList[4].toString(),
+                            });
+                            Fluttertoast.showToast(
+                                msg:
+                                    'Successfully Added. Wait for admin approval');
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HomeScreen()));
+                          }).catchError((onError) {
+                            print(onError);
+                          });
+                        },
+                        child: Text(
+                          'Submit',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),

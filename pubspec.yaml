@@ -55,6 +55,7 @@ dependencies:
   flutter_signin_button:
   google_sign_in:
   provider:
+  google_maps_flutter:
 
 
 
