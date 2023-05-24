@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hotel_review/providers/BasicInfoProvider.dart';
 import 'package:hotel_review/providers/ads_provider.dart';
+import 'package:hotel_review/providers/free_post_provider.dart';
 import 'package:hotel_review/providers/user_provider.dart';
 import 'package:hotel_review/screens/splash_screen/splash_screen.dart';
 import 'package:hotel_review/widgets/color_widget.dart';
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<UserProvider>(create: (context)=>UserProvider(),),
         ChangeNotifierProvider<AdsProvider>(create: (context)=>AdsProvider(),),
         ChangeNotifierProvider<BasicInfoProvider>(create: (context)=>BasicInfoProvider(),),
+        ChangeNotifierProvider<FreePostProvider>(create: (context)=>FreePostProvider(),),
 
       ],
 

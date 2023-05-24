@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hotel_review/providers/free_post_provider.dart';
 import 'package:hotel_review/screens/dialogbox/loading_dialog.dart';
 import 'package:hotel_review/screens/home_screen/home_screen.dart';
 import 'package:hotel_review/widgets/global_var.dart';
@@ -39,13 +40,6 @@ class _FreePostScreenState extends State<FreePostScreen> {
   String name = '';
   String emailID = '';
   double val = 0;
-
-  String itemPrice = '';
-  String itemTitle = '';
-  String phoneNumber = '';
-  String itemDescription = '';
-  String address = '';
-  bool isAdminApprove = false;
 
   chooseImage() async {
     XFile? pickedFile =
@@ -103,10 +97,13 @@ class _FreePostScreenState extends State<FreePostScreen> {
   Widget build(BuildContext context) {
     UserProvider userProvider = Provider.of(context);
     userProvider.getUserData();
-    var userData = userProvider.currentUserData;
+    // var userData = userProvider.currentUserData;
     name = widget.userData.userName;
     emailID = widget.userData.userEmail;
     userImageURl = widget.userData.userImage;
+
+    FreePostProvider freePostProvider = Provider.of(context);
+
     return Scaffold(
       backgroundColor: scaffoldBackgroundColor,
       appBar: AppBar(
@@ -130,6 +127,7 @@ class _FreePostScreenState extends State<FreePostScreen> {
                         uploading = true;
                         next = true;
                       });
+                      uploadFile();
                     } else {
                       Fluttertoast.showToast(
                           msg: 'Please Select minimum 1 picture',
@@ -158,45 +156,40 @@ class _FreePostScreenState extends State<FreePostScreen> {
                     ),
                     TextField(
                       decoration: InputDecoration(hintText: 'Enter  Price'),
-                      onChanged: (value) {
-                        itemPrice = value;
-                      },
+                      controller: freePostProvider.priceController,
                     ),
                     SizedBox(
                       height: 5,
                     ),
                     TextField(
                       decoration: InputDecoration(hintText: 'Enter Title'),
-                      onChanged: (value) {
-                        itemTitle = value;
-                      },
+                      controller: freePostProvider.itemTitleController,
                     ),
                     SizedBox(
                       height: 5,
                     ),
                     TextField(
                       decoration: InputDecoration(hintText: 'Write details'),
-                      onChanged: (value) {
-                        itemDescription = value;
-                      },
+                      keyboardType: TextInputType.multiline,
+                      maxLines: 5,
+                      controller: freePostProvider.itemDescriptionController,
                     ),
                     SizedBox(
                       height: 5,
                     ),
                     TextField(
                       decoration: InputDecoration(hintText: 'Phone Number'),
-                      onChanged: (value) {
-                        phoneNumber = value;
-                      },
+                      keyboardType: TextInputType.phone,
+                      controller: freePostProvider.phoneNumberController,
                     ),
                     SizedBox(
                       height: 5,
                     ),
                     TextField(
                       decoration: InputDecoration(hintText: 'Address'),
-                      onChanged: (value) {
-                        address = value;
-                      },
+                      controller: freePostProvider.addressController,
+                      keyboardType: TextInputType.multiline,
+                      maxLines: 3,
                     ),
                     SizedBox(
                       height: 15,
@@ -238,44 +231,41 @@ class _FreePostScreenState extends State<FreePostScreen> {
                                     message: 'Uploading.....');
                               });
 
-                          uploadFile().whenComplete(() {
-                            FirebaseFirestore.instance
-
-                                //working stat
-                                // .collection('FreePost')
-                                // .doc(postID)
-                                //working end
-
-                                .collection('FreePost')
-                                .doc(FirebaseAuth.instance.currentUser?.uid)
-                                .collection('YourPost')
-                                .doc(postID)
-                                .set({
-                              'id': FirebaseAuth.instance.currentUser?.uid,
-                              'userName': name,
-                              'itemTitle': itemTitle,
-                              'postID': postID,
-                              'itemDescription': itemDescription,
-                              'phoneNumber': phoneNumber,
-                              'isAdminApprove': isAdminApprove,
-                              'timestamp': DateTime.now(),
-                              'userImageURl': userImageURl,
-                              'imageUrl1': imageUrlList[0].toString(),
-                              'imageUrl2': imageUrlList[1].toString(),
-                              'imageUrl3': imageUrlList[2].toString(),
-                              'imageUrl4': imageUrlList[3].toString(),
-                              'imageUrl5': imageUrlList[4].toString(),
-                            });
-                            Fluttertoast.showToast(
-                                msg:
-                                    'Successfully Added. Wait for admin approval');
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => HomeScreen()));
-                          }).catchError((onError) {
-                            print(onError);
+                          setState(() {
+                            freePostProvider.userImageURlController.text =
+                                userImageURl;
+                            freePostProvider.userNameController.text = name;
+                            freePostProvider.emailController.text = emailID;
+                            freePostProvider.imageUrl1Controller.text =
+                                imageUrlList[0].toString();
+                            freePostProvider.imageUrl2Controller.text =
+                                imageUrlList[1].toString();
+                            freePostProvider.imageUrl3Controller.text =
+                                imageUrlList[2].toString();
+                            freePostProvider.imageUrl4Controller.text =
+                                imageUrlList[3].toString();
+                            freePostProvider.imageUrl5Controller.text =
+                                imageUrlList[4].toString();
+                            // freePostProvider.imageUrl6Controller.text =
+                            //     imageUrlList[5].toString();
+                            // freePostProvider.imageUrl7Controller.text =
+                            //     imageUrlList[6].toString();
+                            // freePostProvider.imageUrl8Controller.text =
+                            //     imageUrlList[7].toString();
+                            // freePostProvider.imageUrl9Controller.text =
+                            //     imageUrlList[8].toString();
+                            // freePostProvider.imageUrl10Controller.text =
+                            //     imageUrlList[9].toString();
                           });
+
+
+                          // uploadFile().whenComplete(() {
+                          //   freePostProvider.validator(context);
+                          // }).catchError((onError) {
+                          //   print(onError);
+                          // });
+
+                          freePostProvider.validator(context);
                         },
                         child: Text(
                           'Submit',
