@@ -9,7 +9,7 @@ import '../models/basic_info_model.dart';
 class BasicInfoProvider with ChangeNotifier {
   late BasicInfoModel basicInfoModel;
 
-  adsNewModel(QueryDocumentSnapshot element) {
+  NewModel(QueryDocumentSnapshot element) {
     basicInfoModel = BasicInfoModel(
       appsTitle: element.get("appsTitle"),
       appsDescription: element.get("appsDescription"),
@@ -32,7 +32,7 @@ class BasicInfoProvider with ChangeNotifier {
     if (querySnapshot.docs.isEmpty) {
       // Document does not exist, perform the set operation
       await appInfoCollection.doc().set({
-        "appsTitle": "Hotel And Resort Review",
+        "appsTitle": "Hotel & Resort Review & Offer",
         "appsDescription": "Booking your desired Hotel and Resort",
       });
 
@@ -58,7 +58,7 @@ class BasicInfoProvider with ChangeNotifier {
     querySnapshotValue.docs.forEach((element) {
       print(element.data());
 
-      adsNewModel(element);
+      NewModel(element);
 
       newList.add(basicInfoModel);
     });
