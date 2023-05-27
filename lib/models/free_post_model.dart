@@ -16,11 +16,11 @@ class FreePostModel{
   String? imageUrl3;
   String? imageUrl4;
   String? imageUrl5;
-  // String? imageUrl6;
-  // String? imageUrl7;
-  // String? imageUrl8;
-  // String? imageUrl9;
-  // String? imageUrl10;
+  String? imageUrl6;
+  String? imageUrl7;
+  String? imageUrl8;
+  String? imageUrl9;
+  String? imageUrl10;
 
 
   FreePostModel({
@@ -39,11 +39,11 @@ class FreePostModel{
      this.imageUrl3,
      this.imageUrl4,
      this.imageUrl5,
-     // this.imageUrl6,
-     // this.imageUrl7,
-     // this.imageUrl8,
-     // this.imageUrl9,
-     // this.imageUrl10,
+     this.imageUrl6,
+     this.imageUrl7,
+     this.imageUrl8,
+     this.imageUrl9,
+     this.imageUrl10,
 
 
   });

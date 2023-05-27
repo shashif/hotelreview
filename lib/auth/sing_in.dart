@@ -82,7 +82,7 @@ class _SingInState extends State<SingIn> {
                   Text('Sign in to continue'),
                   Text(
                     appsTitle,
-                    textAlign: TextAlign.justify,
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                         fontSize: 30,
                         color: Colors.white,

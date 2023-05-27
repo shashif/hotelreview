@@ -11,6 +11,7 @@ import '../../providers/user_provider.dart';
 import '../../widgets/drawer_widget.dart';
 import '../../widgets/homepage_premimum_ads.dart';
 import '../free_post_screen/free_post_screen.dart';
+import '../google_map/google_map.dart';
 import '../profile_screen/profile_screen.dart';
 import '../search_product/search_product.dart';
 import '../splash_screen/splash_screen.dart';
@@ -39,13 +40,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    AdsProvider adsProvider = Provider.of(context);
+    // AdsProvider adsProvider = Provider.of(context);
     UserProvider userProvider = Provider.of(context);
     userProvider.getUserData();
     var userData= userProvider.currentUserData;
 
 
-    BasicInfoProvider basicInfoProvider=Provider.of(context);
+    // BasicInfoProvider basicInfoProvider=Provider.of(context);
     return Scaffold(
       backgroundColor: scaffoldBackgroundColor,
       appBar: AppBar(
@@ -127,6 +128,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 //     },
                 //   ).toList(),
                 // )
+                TextButton(onPressed: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>CostomGoogleMap()));
+                }, child: Text('location')),
 
 
 
